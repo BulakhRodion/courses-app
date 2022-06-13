@@ -7,7 +7,7 @@ function Button({ buttonText, onClick }) {
 }
 
 Button.propTypes = {
-	buttonText: PropTypes.string,
+	buttonText: PropTypes.string.isRequired,
 	onClick: PropTypes.func,
 };
 

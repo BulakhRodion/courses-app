@@ -5,6 +5,7 @@ export const HeaderContainter = styled.header`
 	padding: 20px 10px;
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 20px;
 `;
 
 export const Username = styled.span`

@@ -17,7 +17,7 @@ typesetting, remaining essentially u
 		duration: 160,
 		authors: [
 			'27cc3006-e93a-4748-8ca8-73d06aa93b6d',
-			'f762978b-61eb-4096-812bebde22838167',
+			'f762978b-61eb-4096-812b-ebde22838167',
 		],
 	},
 	{
@@ -85,3 +85,9 @@ export const INPUT_LABELS = {
 };
 
 export const USERNAME = 'Rodion';
+
+export const COURSE_INFO = {
+	authors: 'Authors',
+	duration: 'Duration',
+	created: 'Created',
+};
