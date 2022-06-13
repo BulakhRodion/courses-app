@@ -15,6 +15,7 @@ import { COURSE_INFO } from '../../../constants';
 import PropTypes from 'prop-types';
 import { minutesToHours } from '@helpers/MinutesToHours';
 import { getAuthors } from '@helpers/matchAuthorsById';
+import Button from '../../../common/Button/Button';
 
 function CourseCard({
 	courseTitle,
@@ -45,6 +46,7 @@ function CourseCard({
 					{COURSE_INFO.created}:
 					<CardDescriptionInfo>{courseCreationDate}</CardDescriptionInfo>
 				</CardDescriptionTitle>
+				<Button buttonText={'Show course'} />
 			</CardRight>
 		</CardContainer>
 	);
