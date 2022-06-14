@@ -20,6 +20,22 @@ export const InputStyled = styled.input`
 	box-sizing: border-box;
 	color: gray;
 	font-size: 16px;
+	height: ${(props) => props.inputHeight};
+	outline: none;
+	&:focus {
+		border-color: orange;
+	}
+`;
+
+export const InputTextAreaStyled = styled.textarea`
+	width: 100%;
+	border: 1px solid yellow;
+	padding: 5px 10px;
+	box-sizing: border-box;
+	color: gray;
+	font-size: 16px;
+	resize: none;
+	height: ${(props) => props.inputHeight};
 	outline: none;
 	&:focus {
 		border-color: orange;
