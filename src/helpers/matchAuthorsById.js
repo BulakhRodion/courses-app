@@ -1,5 +1,10 @@
 import { mockedAuthorsList } from '../constants';
 
+/**
+ * getAuthorById - returns authors by ID
+ * @param authorsID
+ * @returns {string|boolean}
+ */
 export function getAuthors(authorsID) {
 	if (!Array.isArray(authorsID)) {
 		console.log('incorrect values sent');

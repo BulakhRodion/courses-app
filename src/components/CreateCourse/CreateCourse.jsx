@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -19,116 +19,28 @@ import {
 import Input from '../../common/Input/Input';
 
 import {
+	AUTHOR_MODEL,
 	BUTTONS_TEXT,
+	COURSE_MODEL,
+	INITIAL_HOURS,
 	INPUT_LABELS,
 	INPUT_PLACEHOLDERS,
-	mockedAuthorsList,
 } from '../../constants';
 
 import Button from '../../common/Button/Button';
-import { minutesToHours } from '../../helpers/MinutesToHours';
+import {
+	addAuthorToCourse,
+	addCourseData,
+	createAuthor,
+	createCourse,
+	handleAuthorChange,
+	removeAuthorFromCourse,
+} from '../../helpers/CreateCourse';
 
-function CreateCourse({ authors }) {
-	const [duration, setDuration] = React.useState('00:00 hours');
-	const [authorData, setAuthorData] = React.useState({
-		id: '',
-		name: '',
-	});
-	const [courseData, setCourseData] = React.useState({
-		id: '',
-		title: '',
-		description: '',
-		duration: '',
-		authors: [],
-		creationDate: '',
-	});
-
-	function handleAuthorChange(event) {
-		const { name, value } = event.target;
-		setAuthorData({
-			...authorData,
-			[name]: value,
-		});
-	}
-
-	function addCourseData(event) {
-		const { name, value } = event.target;
-
-		if (name === 'duration' && !isNaN(Number(value))) {
-			const countedDuration = minutesToHours(Number(value));
-			setDuration(countedDuration);
-
-			setCourseData({
-				...courseData,
-				[name]: value,
-			});
-
-			return;
-		}
-
-		if (name === 'duration' && isNaN(Number(value))) {
-			alert('Please enter only digits from 0 to 9');
-			setCourseData({
-				...courseData,
-				[name]: '',
-			});
-
-			return;
-		}
-
-		setCourseData({
-			...courseData,
-			[name]: value,
-		});
-
-		console.log(courseData);
-	}
-
-	function createAuthor() {
-		if (authorData.name === '') {
-			alert('Please enter author name');
-			return;
-		}
-
-		const newID = Math.floor(Math.random() * 1000) + 1;
-
-		setAuthorData({
-			...authorData,
-			id: '27cc3006-e93a-4748-8ca8-73d06aa9' + newID,
-		});
-
-		mockedAuthorsList.push(authorData);
-
-		setAuthorData({
-			id: '',
-			name: '',
-		});
-	}
-
-	function addAuthorToCourse(id) {
-		const newAuthor = authors.find((author) => author.id === id);
-		const existingAuthors = courseData.authors;
-		existingAuthors.push(newAuthor);
-
-		console.log(newAuthor, existingAuthors);
-
-		setCourseData({
-			...courseData,
-			authors: existingAuthors,
-		});
-
-		console.log(courseData);
-	}
-
-	function removeAuthorFromCourse(id) {
-		const existingAuthors = courseData.authors;
-		const newAuthorsList = existingAuthors.filter((author) => author.id !== id);
-
-		setCourseData({
-			...courseData,
-			authors: newAuthorsList,
-		});
-	}
+function CreateCourse({ authors, changeCourseDisplay }) {
+	const [duration, setDuration] = useState(INITIAL_HOURS);
+	const [authorData, setAuthorData] = useState(AUTHOR_MODEL);
+	const [courseData, setCourseData] = useState(COURSE_MODEL);
 
 	return (
 		<AddCoursesContainer>
@@ -140,9 +52,12 @@ function CreateCourse({ authors }) {
 					inputPlaceholder={INPUT_PLACEHOLDERS.enterTitle}
 					inputName={'title'}
 					inputValue={courseData.title}
-					inputOnChange={addCourseData}
+					inputOnChange={(e) => addCourseData(e, courseData, setCourseData)}
 				/>
-				<Button buttonText={BUTTONS_TEXT.createCourse} />
+				<Button
+					buttonText={BUTTONS_TEXT.createCourse}
+					buttonOnClick={() => createCourse(courseData, changeCourseDisplay)}
+				/>
 			</AddCoursesTopContainer>
 			<Input
 				inputID={'course-description'}
@@ -154,7 +69,7 @@ function CreateCourse({ authors }) {
 				isTextarea={true}
 				inputName={'description'}
 				inputValue={courseData.description}
-				inputOnChange={addCourseData}
+				inputOnChange={(e) => addCourseData(e, courseData, setCourseData)}
 			/>
 			<AddCoursesBottomContainer>
 				<AddCoursesBottomLeft>
@@ -168,11 +83,13 @@ function CreateCourse({ authors }) {
 							inputMaxWidth={'100%'}
 							inputName={'name'}
 							inputValue={authorData.name}
-							inputOnChange={handleAuthorChange}
+							inputOnChange={(e) =>
+								handleAuthorChange(e, authorData, setAuthorData)
+							}
 						/>
 						<Button
 							buttonText={BUTTONS_TEXT.createAuthor}
-							buttonOnClick={createAuthor}
+							buttonOnClick={() => createAuthor(authorData, setAuthorData)}
 						/>
 					</AddCoursesBottomLeftBlock>
 					<AddCoursesBottomLeftBlock>
@@ -185,7 +102,9 @@ function CreateCourse({ authors }) {
 							inputMaxWidth={'100%'}
 							inputName={'duration'}
 							inputValue={courseData.duration}
-							inputOnChange={addCourseData}
+							inputOnChange={(e) =>
+								addCourseData(e, courseData, setCourseData, setDuration)
+							}
 						/>
 						<AddCourseDurationWrapper>
 							Duration:
@@ -203,7 +122,14 @@ function CreateCourse({ authors }) {
 										{author.name}
 										<Button
 											buttonText={BUTTONS_TEXT.addAuthor}
-											buttonOnClick={() => addAuthorToCourse(author.id)}
+											buttonOnClick={() =>
+												addAuthorToCourse(
+													author.id,
+													authors,
+													courseData,
+													setCourseData
+												)
+											}
 										/>
 									</AddCoursesBottomRightAuthorsList>
 								);
@@ -220,7 +146,13 @@ function CreateCourse({ authors }) {
 										{author.name}
 										<Button
 											buttonText={BUTTONS_TEXT.deleteAuthor}
-											buttonOnClick={() => removeAuthorFromCourse(author.id)}
+											buttonOnClick={() =>
+												removeAuthorFromCourse(
+													author.id,
+													courseData,
+													setCourseData
+												)
+											}
 										/>
 									</AddCoursesBottomRightAuthorsList>
 								);
@@ -235,6 +167,7 @@ function CreateCourse({ authors }) {
 
 CreateCourse.propTypes = {
 	authors: PropTypes.array,
+	changeCourseDisplay: PropTypes.func,
 };
 
 export default CreateCourse;

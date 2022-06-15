@@ -23,7 +23,7 @@ function Courses() {
 	}
 
 	function showAddCourse() {
-		setDisplayAddCourse(false);
+		setDisplayAddCourse(!displayAddCourse);
 	}
 
 	return (
@@ -54,7 +54,10 @@ function Courses() {
 					})}
 				</>
 			) : (
-				<CreateCourse authors={mockedAuthorsList}></CreateCourse>
+				<CreateCourse
+					authors={mockedAuthorsList}
+					changeCourseDisplay={showAddCourse}
+				></CreateCourse>
 			)}
 		</CoursesContainer>
 	);

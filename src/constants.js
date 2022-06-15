@@ -91,3 +91,19 @@ export const COURSE_INFO = {
 	duration: 'Duration',
 	created: 'Created',
 };
+
+export const INITIAL_HOURS = '00:00 hours';
+
+export const AUTHOR_MODEL = {
+	id: '',
+	name: '',
+};
+
+export const COURSE_MODEL = {
+	id: '',
+	title: '',
+	description: '',
+	duration: '',
+	authors: [],
+	creationDate: '',
+};
